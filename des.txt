@@ -1,0 +1,51 @@
+ If Triple DES is desired (in addition to regular DES), the label TRIPLEDES must be defined, usually by a -D option on the compiler command line.
+
+For the fastest operation, data used by the package is packed one bit per byte. Each byte must be either 0 or 1. The results will be highly anomalous if this is not the case.
+
+To DES encrypt or decrypt, first declare an object of the des encryption class:
+
+     des crypto;
+
+To Triple DES encrypt or decrypt, first declare an object of the triple_des encryption class:
+
+     triple_des crypto;
+
+If you have a 56-bit key, you can initialize a des object to encrypt and decrypt with the specified key by calling a member function:
+
+     crypto.initialize(key);
+
+     const unsigned char key[DES_KEY_SIZE];
+                      56-bit encryption and decryption
+                      key, packed one bit per byte (each
+                      byte must be either 0 or 1)
+
+If you have a 168-bit key, you can initialize a triple_des object to encrypt and decrypt with the specified key by calling a member function:
+
+     crypto.initialize(key);
+
+     const unsigned char key[3*DES_KEY_SIZE];
+                      168-bit encryption and decryption
+                      key, packed one bit per byte (each
+                      byte must be either 0 or 1)
+
+Alternatively, you may generate a key and initialize the object with a password:
+
+     crypto.password(p);
+
+     const char *p;   pointer to nul-terminated password
+
+The password may be any length (except zero), but only the first 32 characters will be used for regular DES, and only the first 48 characters will be used for Triple DES. It may contain any characters except nuls. It is case-sensitive; i.e., passwords that differ only in capitalization will produce different keys.
+
+Then to encrypt or decrypt a block of 64 bits, call the member functions:
+
+     crypto.encrypt(data);
+
+     crypto.decrypt(data);
+
+     unsigned char data[DES_DATA_SIZE];
+                       64-bit block of data to be
+                       encrypted or decrypted, packed one
+                       bit per byte (each byte must be
+                       either 0 or 1)
+
+The encrypted or decrypted data is written back into the same buffer in the same format (one bit per byte). 
